@@ -1,10 +1,10 @@
 {
-  "name": "KAKUSHIN cloud demo",
+  "name": "KAKUSHIN read-only review",
   "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
   "forwardPorts": [8000],
   "portsAttributes": {
     "8000": {
-      "label": "KAKUSHIN 架空データ専用デモ",
+      "label": "KAKUSHIN 読み取り専用照合",
       "onAutoForward": "openBrowser",
       "protocol": "http"
     }

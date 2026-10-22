@@ -2,9 +2,13 @@
 
 仕様書（抽出仕様 v1.0、2026/10/22）に基づく、独立した固定計算エンジンとローカル操作画面です。Python 3.11以上、追加依存なしで動作します。**現在はシャドーモードです。本番Sheets更新・Slack通知・業者送信・月替わりは実行しません。**
 
+## 実CSV・Excelを画面で照合する
+
+読み取り専用の **ファイル照合** を追加しました。既存Codespacesの更新は `git pull --ff-only && python3 .devcontainer/start_demo.py --restart` です。入力原本・確認条件はサーバーに保存せず、本番にも接続しません。[次の作業手順](docs/FILE-REVIEW.md) に沿って3ファイルを選択してください。今回だけの例外は、ファイルハッシュ・日付と結び付けてその実行だけに適用します。
+
 ## クラウドで画面を開く（Windowsへのインストール不要）
 
-GitHubの **Code → Codespaces → Create codespace on main** から起動できます。画面が自動で開かない場合は **PORTS → 8000 → Open in Browser** を押してください。架空データ専用・一時DBのデモであり、本番には接続しません。詳しくは [画面を開く手順](docs/TEST-ENVIRONMENT.md) を参照してください。
+GitHubの **Code → Codespaces → Create codespace on main** から起動できます。画面が自動で開かない場合は **PORTS → 8000 → Open in Browser** を押してください。Codespacesでは読み取り専用のファイル照合モードが起動し、本番には接続しません。架空データ専用モードは `--demo` で利用できます。詳しくは [画面を開く手順](docs/TEST-ENVIRONMENT.md) を参照してください。
 
 ## 起動
 
@@ -51,7 +55,7 @@ CLIの集計は結果JSONを標準出力へ返します。PLに保留があれ�
 
 ## 保存・バックアップ
 
-`.runtime/` に `operations.sqlite3` と `sources/<SHA256>.csv` を保管します。Git対象外、ディレクトリ0700・ファイル0600です。原本CSVには個人情報が含まれ得るため、アクセス制限・暗号化ディスク・保存期間を本番導入時に確定してください。DB結果は個人連絡先・ゲスト名を保存しません。
+通常のCLI／ローカル集計モードでは `.runtime/` に `operations.sqlite3` と `sources/<SHA256>.csv` を保管します。Git対象外、ディレクトリ0700・ファイル0600です。原本CSVには個人情報が含まれ得るため、アクセス制限・暗号化ディスク・保存期間を本番導入時に確定してください。DB結果は個人連絡先・ゲスト名を保存しません。
 
 ```bash
 python3 -m kakushin backup /tmp/kakushin-backup.sqlite3
@@ -69,3 +73,5 @@ python3 -m kakushin backup /tmp/kakushin-backup.sqlite3
 初めて画面を表示する方は [PCでのテスト手順](docs/TEST-ENVIRONMENT.md) を参照してください。
 
 クラウド向けデモを手動起動する場合は `python3 -m kakushin serve --demo --host 0.0.0.0 --port 8000` を使用します。プロキシのHostと埋め込みを許可するのは、この架空データ専用モードだけです。通常モードの外部バインドは拒否します。
+
+**ファイル照合モードでは上記の原本アーカイブ・実行保存は無効**です。入力と結果はリクエストの処理・ブラウザー表示にだけ使用し、必要な結果は操作者が保存します。

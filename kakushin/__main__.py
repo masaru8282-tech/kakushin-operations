@@ -1,6 +1,7 @@
 import argparse
 import json
 import tempfile
+import os
 from pathlib import Path
 
 from .service import run_csv, stock_tool, today
@@ -14,6 +15,8 @@ def main():
     web = sub.add_parser('serve')
     web.add_argument('--port', type=int, default=8000)
     web.add_argument('--host', choices=('127.0.0.1', '0.0.0.0'), default='127.0.0.1')
+    web.add_argument('--review', action='store_true', help='読み取り専用ファイル照合・入力非保存')
+    web.add_argument('--allowed-host', help='クラウド照合を公開する正確なホスト名')
     web.add_argument('--demo', action='store_true', help='架空データ専用・一時DB・実CSV受付なし')
     run = sub.add_parser('run')
     run.add_argument('csv', type=Path)
@@ -27,6 +30,18 @@ def main():
     args = parser.parse_args()
     if args.command == 'tool':
         print(json.dumps(stock_tool(json.loads(args.input.read_text())), ensure_ascii=False, indent=2))
+        return
+    if args.command == 'serve' and args.demo and args.review:
+        parser.error('--demo と --review は併用できません')
+    if args.command == 'serve' and args.review:
+        from .web import serve
+        allowed = args.allowed_host
+        if not allowed and os.environ.get('CODESPACE_NAME'):
+            allowed = os.environ['CODESPACE_NAME'] + '-' + str(args.port) + '.' + os.environ.get('GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN', 'app.github.dev')
+        if args.host != '127.0.0.1' and not allowed:
+            parser.error('クラウド照合にはCodespacesまたは --allowed-host の設定が必要です')
+        with tempfile.TemporaryDirectory(prefix='kakushin-review-') as temporary:
+            serve(Store(temporary), args.port, host=args.host, review=True, allowed_host=allowed)
         return
     if args.command == 'serve' and args.demo:
         from .web import serve

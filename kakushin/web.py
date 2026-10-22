@@ -6,16 +6,21 @@ import json
 from pathlib import Path
 import secrets
 import re
+import os
 from urllib.parse import urlsplit
 
 from .service import run_csv, stock_tool, today
 from .master import MASTER, RULE_VERSION
 
-MAX_BODY = 12 * 1024 * 1024
+MAX_BODY = 48 * 1024 * 1024
 
 
-def serve(store, port=8000, host="127.0.0.1", demo=False):
-    if host != "127.0.0.1" and not demo:
+def serve(store, port=8000, host="127.0.0.1", demo=False, review=False, allowed_host=None):
+    if demo and review:
+        raise ValueError("デモと実ファイル照合を同時に起動できません")
+    if review and host != "127.0.0.1" and (not allowed_host or not re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?", allowed_host)):
+        raise ValueError("クラウド照合には正確な許可ホスト名が必要です")
+    if host != "127.0.0.1" and not demo and not review:
         raise ValueError("外部バインドはデモ専用です")
     csrf = secrets.token_urlsafe(32)
 
@@ -26,6 +31,8 @@ def serve(store, port=8000, host="127.0.0.1", demo=False):
 
         def trusted_host(self):
             authority = self.headers.get('Host', '')
+            if review and allowed_host and authority == allowed_host:
+                return True
             if demo:
                 # A reverse proxy may preserve its own hostname/port. No real data
                 # or user uploads are available in this separate demo process.
@@ -52,12 +59,14 @@ def serve(store, port=8000, host="127.0.0.1", demo=False):
                 return self.send(403, {'error': 'Host not allowed'})
             path = urlsplit(self.path).path
             if path == '/':
-                html = Path(__file__).with_name('ui.html').read_text().replace('__CSRF__', csrf).replace('__DEMO__', 'true' if demo else 'false')
+                html = Path(__file__).with_name('ui.html').read_text().replace('__CSRF__', csrf).replace('__DEMO__', 'true' if demo else 'false').replace('__REVIEW__', 'true' if review else 'false')
                 return self.send(200, html, True)
             if path == '/api/health':
-                return self.send(200, dict(status='ok', mode='SHADOW', demo=demo, today=today(), rule_version=RULE_VERSION))
+                return self.send(200, dict(status='ok', mode='SHADOW', demo=demo, review=review, instance=os.environ.get('KAKUSHIN_SERVER_INSTANCE'), today=today(), rule_version=RULE_VERSION))
             if path == '/api/master':
                 return self.send(200, MASTER)
+            if review and path.startswith('/api/runs'):
+                return self.send(200, [] if path == '/api/runs' else {'error': '照合結果はディスクに保存しません'})
             if path == '/api/runs':
                 return self.send(200, store.list_runs())
             if path.startswith('/api/runs/'):
@@ -71,10 +80,21 @@ def serve(store, port=8000, host="127.0.0.1", demo=False):
             try:
                 length = int(self.headers.get('Content-Length', '0'))
                 if length <= 0 or length > MAX_BODY:
-                    return self.send(413, {'error': '入力は12MB以下で指定してください'})
+                    return self.send(413, {'error': '入力全体は48MB以下で指定してください'})
                 payload = json.loads(self.rfile.read(length))
                 if not isinstance(payload, dict):
                     raise ValueError('JSON object required')
+                if self.path == '/api/reconcile':
+                    if demo:
+                        return self.send(403, {'error': '架空データ専用モードでは実ファイルを受け付けません'})
+                    if not review:
+                        return self.send(403, {'error': '読み取り専用のファイル照合モードで起動してください'})
+                    from .review import review_files
+                    files = [base64.b64decode(payload[k], validate=True) for k in ('csv_base64', 'pl_base64', 'linen_base64')]
+                    if len(files[0]) > 8*1024*1024 or any(len(f)>12*1024*1024 for f in files[1:]):
+                        return self.send(413, {'error': 'CSVは8MB、各Excelは12MB以下にしてください'})
+                    result = review_files(*files, payload['month'], payload['business_date'], payload.get('scope','unknown'), payload.get('approvals'))
+                    return self.send(200, result)
                 if self.path == '/api/demo':
                     if not demo:
                         return self.send(404, {'error': 'デモ専用の操作です'})
@@ -82,8 +102,8 @@ def serve(store, port=8000, host="127.0.0.1", demo=False):
                     result, reused = run_csv(store, data, '2026-10', 'full', '2026-10-22', private_exceptions=False)
                     return self.send(200, dict(result=result, reused=reused))
                 if self.path == '/api/run':
-                    if demo:
-                        return self.send(403, {'error': 'デモでは実CSVを受け付けません。「架空データで試す」を使ってください'})
+                    if demo or review:
+                        return self.send(403, {'error': 'このモードでは通常のCSV保存処理は無効です。デモまたはファイル照合を使ってください'})
                     data = base64.b64decode(payload['csv_base64'], validate=True)
                     if len(data) > 8 * 1024 * 1024:
                         return self.send(413, {'error': 'CSVは8MB以下'})
@@ -99,7 +119,7 @@ def serve(store, port=8000, host="127.0.0.1", demo=False):
 
     server = ThreadingHTTPServer((host, port), Handler)
     server.timeout = 30
-    print(f'KAKUSHIN operator server started; host={host}; port={port}; mode=SHADOW; demo={demo}', flush=True)
+    print(f'KAKUSHIN operator server started; host={host}; port={port}; mode=SHADOW; demo={demo}; review={review}', flush=True)
     try:
         server.serve_forever()
     finally:
