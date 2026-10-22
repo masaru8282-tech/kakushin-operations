@@ -1,0 +1,9 @@
+{
+  "operation": "supplier_order",
+  "args": {
+    "item": "PILLOW",
+    "opening": 6,
+    "dispatch_today": 20,
+    "dispatch_until_next": 10
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "operation": "draft_plan",
+  "args": {
+    "business_date": "2026-10-22",
+    "forecast_until": "2026-10-24",
+    "room_stock": {
+      "細工町:202": {
+        "S_SHEET": 0,
+        "S_DUVET": 0,
+        "PILLOW": 1,
+        "FACE": 1,
+        "BATH": 1,
+        "MAT": 0
+      }
+    },
+    "usage_events": [
+      {
+        "room": "細工町:202",
+        "date": "2026-10-22",
+        "quantities": {
+          "S_SHEET": 2,
+          "S_DUVET": 2,
+          "PILLOW": 2,
+          "FACE": 2,
+          "BATH": 2,
+          "MAT": 1
+        }
+      }
+    ],
+    "reservations": [
+      {
+        "room": "細工町:202",
+        "ci": "2026-10-20",
+        "co": "2026-10-22",
+        "cancelled": false
+      }
+    ],
+    "reservation_scope_confirmed": true
+  }
+}

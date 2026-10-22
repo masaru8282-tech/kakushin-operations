@@ -1,0 +1,591 @@
+{
+  "version": "2026-10-22-extracted-v1",
+  "facilities": {
+    "蓮台寺": {
+      "key": "F01",
+      "aliases": [
+        "01_ intro vetta"
+      ]
+    },
+    "細工町": {
+      "key": "F02",
+      "aliases": [
+        "02_vetta＠Kumamoto Castle"
+      ]
+    },
+    "桜町": {
+      "key": "F03",
+      "aliases": [
+        "03_vetta@kumamoto sakuramachi"
+      ]
+    },
+    "新屋敷": {
+      "key": "F04",
+      "aliases": [
+        "04_vetta@kumamoto shinyashiki"
+      ]
+    },
+    "水前寺": {
+      "key": "F05",
+      "aliases": [
+        "05_vetta@kumamoto suizenji"
+      ]
+    },
+    "南熊本": {
+      "key": "F06",
+      "aliases": [
+        "06_vetta@Minami-Kumamoto Station"
+      ]
+    },
+    "水前寺②": {
+      "key": "F07",
+      "aliases": [
+        "07_vetta@kumamoto suizenji2"
+      ]
+    },
+    "八代": {
+      "key": "F08",
+      "aliases": [
+        "08_vetta@yatsushiro Egretta"
+      ]
+    },
+    "二本木": {
+      "key": "F09",
+      "aliases": [
+        "09_valeur_kumamotoekimae"
+      ]
+    },
+    "出水": {
+      "key": "F-IZUMI",
+      "aliases": []
+    },
+    "自適荘": {
+      "key": "F-JITEKI",
+      "aliases": [
+        "10_jitekiso",
+        "jitekiso"
+      ]
+    },
+    "岡田邸": {
+      "key": "F-OKADA",
+      "aliases": []
+    }
+  },
+  "rooms": {
+    "蓮台寺:1001": {
+      "facility": "蓮台寺",
+      "room": "1001",
+      "rows": {
+        "S_SHEET": 3,
+        "S_DUVET": 4,
+        "PILLOW": 5,
+        "FACE": 6,
+        "BATH": 7,
+        "MAT": 8
+      }
+    },
+    "蓮台寺:1002": {
+      "facility": "蓮台寺",
+      "room": "1002",
+      "rows": {
+        "S_SHEET": 10,
+        "S_DUVET": 11,
+        "PILLOW": 12,
+        "FACE": 13,
+        "BATH": 14,
+        "MAT": 15
+      }
+    },
+    "蓮台寺:1003": {
+      "facility": "蓮台寺",
+      "room": "1003",
+      "rows": {
+        "S_SHEET": 17,
+        "S_DUVET": 18,
+        "PILLOW": 19,
+        "FACE": 20,
+        "BATH": 21,
+        "MAT": 22
+      }
+    },
+    "細工町:201": {
+      "facility": "細工町",
+      "room": "201",
+      "rows": {
+        "S_SHEET": 24,
+        "S_DUVET": 25,
+        "PILLOW": 26,
+        "FACE": 27,
+        "BATH": 28,
+        "MAT": 29
+      }
+    },
+    "細工町:202": {
+      "facility": "細工町",
+      "room": "202",
+      "rows": {
+        "S_SHEET": 31,
+        "S_DUVET": 32,
+        "PILLOW": 33,
+        "FACE": 34,
+        "BATH": 35,
+        "MAT": 36
+      }
+    },
+    "細工町:502": {
+      "facility": "細工町",
+      "room": "502",
+      "rows": {
+        "S_SHEET": 38,
+        "S_DUVET": 39,
+        "PILLOW": 40,
+        "FACE": 41,
+        "BATH": 42,
+        "MAT": 43
+      }
+    },
+    "細工町:602": {
+      "facility": "細工町",
+      "room": "602",
+      "rows": {
+        "S_SHEET": 45,
+        "S_DUVET": 46,
+        "PILLOW": 47,
+        "FACE": 48,
+        "BATH": 49,
+        "MAT": 50
+      }
+    },
+    "細工町:804": {
+      "facility": "細工町",
+      "room": "804",
+      "rows": {
+        "S_SHEET": 52,
+        "S_DUVET": 53,
+        "PILLOW": 54,
+        "FACE": 55,
+        "BATH": 56,
+        "MAT": 57
+      }
+    },
+    "細工町:1003": {
+      "facility": "細工町",
+      "room": "1003",
+      "rows": {
+        "S_SHEET": 59,
+        "S_DUVET": 60,
+        "PILLOW": 61,
+        "FACE": 62,
+        "BATH": 63,
+        "MAT": 64
+      }
+    },
+    "桜町:603": {
+      "facility": "桜町",
+      "room": "603",
+      "rows": {
+        "Q_SHEET": 66,
+        "Q_DUVET": 67,
+        "PILLOW": 68,
+        "FACE": 69,
+        "BATH": 70,
+        "MAT": 71
+      }
+    },
+    "桜町:702": {
+      "facility": "桜町",
+      "room": "702",
+      "rows": {
+        "Q_SHEET": 73,
+        "Q_DUVET": 74,
+        "PILLOW": 75,
+        "FACE": 76,
+        "BATH": 77,
+        "MAT": 78
+      }
+    },
+    "桜町:804": {
+      "facility": "桜町",
+      "room": "804",
+      "rows": {
+        "S_SHEET": 80,
+        "S_DUVET": 81,
+        "PILLOW": 82,
+        "FACE": 83,
+        "BATH": 84,
+        "MAT": 85
+      }
+    },
+    "桜町:902": {
+      "facility": "桜町",
+      "room": "902",
+      "rows": {
+        "Q_SHEET": 87,
+        "Q_DUVET": 88,
+        "PILLOW": 89,
+        "FACE": 90,
+        "BATH": 91,
+        "MAT": 92
+      }
+    },
+    "新屋敷:701": {
+      "facility": "新屋敷",
+      "room": "701",
+      "rows": {
+        "S_SHEET": 94,
+        "S_DUVET": 95,
+        "PILLOW": 96,
+        "FACE": 97,
+        "BATH": 98,
+        "MAT": 99,
+        "SD_SHEET": 100,
+        "SD_DUVET": 101
+      }
+    },
+    "新屋敷:703": {
+      "facility": "新屋敷",
+      "room": "703",
+      "rows": {
+        "S_SHEET": 103,
+        "S_DUVET": 104,
+        "PILLOW": 105,
+        "FACE": 106,
+        "BATH": 107,
+        "MAT": 108,
+        "SD_SHEET": 109,
+        "SD_DUVET": 110
+      }
+    },
+    "水前寺:401": {
+      "facility": "水前寺",
+      "room": "401",
+      "rows": {
+        "S_SHEET": 112,
+        "S_DUVET": 113,
+        "PILLOW": 114,
+        "FACE": 115,
+        "BATH": 116,
+        "MAT": 117
+      }
+    },
+    "水前寺:403": {
+      "facility": "水前寺",
+      "room": "403",
+      "rows": {
+        "S_SHEET": 119,
+        "S_DUVET": 120,
+        "PILLOW": 121,
+        "FACE": 122,
+        "BATH": 123,
+        "MAT": 124
+      }
+    },
+    "水前寺:406": {
+      "facility": "水前寺",
+      "room": "406",
+      "rows": {
+        "S_SHEET": 126,
+        "S_DUVET": 127,
+        "PILLOW": 128,
+        "FACE": 129,
+        "BATH": 130,
+        "MAT": 131
+      }
+    },
+    "水前寺:503": {
+      "facility": "水前寺",
+      "room": "503",
+      "rows": {
+        "S_SHEET": 133,
+        "S_DUVET": 134,
+        "PILLOW": 135,
+        "FACE": 136,
+        "BATH": 137,
+        "MAT": 138
+      }
+    },
+    "水前寺:505": {
+      "facility": "水前寺",
+      "room": "505",
+      "rows": {
+        "S_SHEET": 140,
+        "S_DUVET": 141,
+        "PILLOW": 142,
+        "FACE": 143,
+        "BATH": 144,
+        "MAT": 145
+      }
+    },
+    "水前寺:702": {
+      "facility": "水前寺",
+      "room": "702",
+      "rows": {
+        "S_SHEET": 147,
+        "S_DUVET": 148,
+        "PILLOW": 149,
+        "FACE": 150,
+        "BATH": 151,
+        "MAT": 152
+      }
+    },
+    "南熊本:802": {
+      "facility": "南熊本",
+      "room": "802",
+      "rows": {
+        "S_SHEET": 154,
+        "SD_SHEET": 155,
+        "S_DUVET": 156,
+        "SD_DUVET": 157,
+        "PILLOW": 158,
+        "FACE": 159,
+        "BATH": 160,
+        "MAT": 161
+      }
+    },
+    "南熊本:803": {
+      "facility": "南熊本",
+      "room": "803",
+      "rows": {
+        "SD_SHEET": 163,
+        "SD_DUVET": 164,
+        "PILLOW": 165,
+        "FACE": 166,
+        "BATH": 167,
+        "MAT": 168
+      }
+    },
+    "水前寺②:204": {
+      "facility": "水前寺②",
+      "room": "204",
+      "rows": {
+        "S_SHEET": 170,
+        "S_DUVET": 171,
+        "PILLOW": 172,
+        "FACE": 173,
+        "BATH": 174,
+        "MAT": 175
+      }
+    },
+    "水前寺②:210": {
+      "facility": "水前寺②",
+      "room": "210",
+      "rows": {
+        "S_SHEET": 177,
+        "S_DUVET": 178,
+        "PILLOW": 179,
+        "FACE": 180,
+        "BATH": 181,
+        "MAT": 182
+      }
+    },
+    "水前寺②:308": {
+      "facility": "水前寺②",
+      "room": "308",
+      "rows": {
+        "S_SHEET": 184,
+        "S_DUVET": 185,
+        "PILLOW": 186,
+        "FACE": 187,
+        "BATH": 188,
+        "MAT": 189
+      }
+    },
+    "水前寺②:402": {
+      "facility": "水前寺②",
+      "room": "402",
+      "rows": {
+        "S_SHEET": 191,
+        "S_DUVET": 192,
+        "PILLOW": 193,
+        "FACE": 194,
+        "BATH": 195,
+        "MAT": 196
+      }
+    },
+    "水前寺②:407": {
+      "facility": "水前寺②",
+      "room": "407",
+      "rows": {
+        "S_SHEET": 198,
+        "S_DUVET": 199,
+        "PILLOW": 200,
+        "FACE": 201,
+        "BATH": 202,
+        "MAT": 203
+      }
+    },
+    "水前寺②:503": {
+      "facility": "水前寺②",
+      "room": "503",
+      "rows": {
+        "S_SHEET": 205,
+        "S_DUVET": 206,
+        "PILLOW": 207,
+        "FACE": 208,
+        "BATH": 209,
+        "MAT": 210
+      }
+    },
+    "水前寺②:505": {
+      "facility": "水前寺②",
+      "room": "505",
+      "rows": {
+        "S_SHEET": 212,
+        "S_DUVET": 213,
+        "PILLOW": 214,
+        "FACE": 215,
+        "BATH": 216,
+        "MAT": 217
+      }
+    },
+    "水前寺②:510": {
+      "facility": "水前寺②",
+      "room": "510",
+      "rows": {
+        "S_SHEET": 219,
+        "S_DUVET": 220,
+        "PILLOW": 221,
+        "FACE": 222,
+        "BATH": 223,
+        "MAT": 224
+      }
+    },
+    "二本木:": {
+      "facility": "二本木",
+      "room": "",
+      "rows": {
+        "S_SHEET": 226,
+        "SD_SHEET": 227,
+        "S_DUVET": 228,
+        "SD_DUVET": 229,
+        "PILLOW": 230,
+        "FACE": 231,
+        "BATH": 232,
+        "MAT": 233
+      }
+    },
+    "出水:": {
+      "facility": "出水",
+      "room": "",
+      "rows": {
+        "Q_SHEET": 235,
+        "Q_DUVET": 236,
+        "SD_SHEET": 237,
+        "SD_DUVET": 238,
+        "PILLOW": 239,
+        "FACE": 240,
+        "BATH": 241,
+        "MAT": 242
+      }
+    },
+    "八代:101": {
+      "facility": "八代",
+      "room": "101",
+      "rows": {
+        "S_SHEET": 258,
+        "S_DUVET": 259,
+        "PILLOW": 260,
+        "FACE": 261,
+        "BATH": 262,
+        "MAT": 263
+      }
+    },
+    "八代:102": {
+      "facility": "八代",
+      "room": "102",
+      "rows": {
+        "S_SHEET": 266,
+        "S_DUVET": 267,
+        "PILLOW": 268,
+        "FACE": 269,
+        "BATH": 270,
+        "MAT": 271
+      }
+    },
+    "八代:103": {
+      "facility": "八代",
+      "room": "103",
+      "rows": {
+        "S_SHEET": 274,
+        "S_DUVET": 275,
+        "PILLOW": 276,
+        "FACE": 277,
+        "BATH": 278,
+        "MAT": 279
+      }
+    },
+    "八代:104": {
+      "facility": "八代",
+      "room": "104",
+      "rows": {
+        "SD_SHEET": 282,
+        "SD_DUVET": 283,
+        "PILLOW": 284,
+        "FACE": 285,
+        "BATH": 286,
+        "MAT": 287
+      }
+    },
+    "八代:105": {
+      "facility": "八代",
+      "room": "105",
+      "rows": {
+        "SD_SHEET": 290,
+        "SD_DUVET": 291,
+        "PILLOW": 292,
+        "FACE": 293,
+        "BATH": 294,
+        "MAT": 295
+      }
+    },
+    "八代:106": {
+      "facility": "八代",
+      "room": "106",
+      "rows": {
+        "SD_SHEET": 298,
+        "SD_DUVET": 299,
+        "PILLOW": 300,
+        "FACE": 301,
+        "BATH": 302,
+        "MAT": 303
+      }
+    }
+  },
+  "pl_headers": {
+    "B": "蓮台寺_1001",
+    "C": "蓮台寺_1002",
+    "D": "蓮台寺_1003",
+    "E": "細工町_502",
+    "F": "細工町_602",
+    "G": "細工町_1003",
+    "H": "細工町_201",
+    "I": "細工町_202",
+    "J": "細工町_804",
+    "K": "桜町_603",
+    "L": "桜町_702",
+    "M": "桜町_804",
+    "N": "桜町_902",
+    "O": "新屋敷_701",
+    "P": "新屋敷_703",
+    "Q": "水前寺_401",
+    "R": "水前寺_403",
+    "S": "水前寺_406",
+    "T": "水前寺_503",
+    "U": "水前寺_505",
+    "V": "水前寺_702",
+    "W": "南熊本_802",
+    "X": "南熊本_803",
+    "Y": "水前寺2_204",
+    "Z": "水前寺2_407",
+    "AA": "水前寺2_308",
+    "AB": "水前寺2_402",
+    "AC": "水前寺2_210",
+    "AD": "水前寺2_505",
+    "AE": "水前寺2_503",
+    "AF": "水前寺2_510",
+    "AG": "ヴァルール駅前",
+    "AH": "自適荘",
+    "AI": "八代_Single",
+    "AJ": "八代_SemiD"
+  }
+}
