@@ -58,3 +58,18 @@ class ReviewHTTPTests(unittest.TestCase):
         result=subprocess.run([sys.executable,'-m','kakushin','serve','--review','--host','0.0.0.0'],capture_output=True,text=True)
         self.assertEqual(result.returncode,2)
         self.assertIn('--allowed-host',result.stderr)
+
+    def test_daily_schedule_api_preserves_fixed_order_and_does_not_save_inputs(self):
+        data=Path('examples/reservations.csv').read_bytes();_,linen=fixtures(data)
+        for row in range(4,14):linen['倉庫入出庫履歴']['Y'+str(row)]=0
+        encode=lambda x:base64.b64encode(x).decode()
+        payload=dict(csv_base64=encode(data),linen_base64=encode(workbook(linen)),business_date='2026-10-23')
+        result=self.request('/api/daily-plan',payload)
+        self.assertEqual(len(result['report_days']),3)
+        self.assertEqual(result['written_ranges'],[])
+        self.assertFalse(result['external_sent']);self.assertFalse(result['saved_to_server'])
+        self.assertFalse(result['orders'][0]['copy_ready'])
+        payload['options']={'order_states':{'2026-10-23':'ORDERED'}}
+        result=self.request('/api/daily-plan',payload)
+        self.assertTrue(all(i['quantity']==0 for i in result['orders'][0]['items']))
+        self.assertEqual(list(Path(self.temp.name).iterdir()),[])

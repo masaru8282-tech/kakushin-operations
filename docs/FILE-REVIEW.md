@@ -48,3 +48,5 @@ python3 -m kakushin serve --review --port 8000
 ```
 
 これはloopback専用です。Codespacesで外部バインドする場合は `--host 0.0.0.0` を追加し、Codespaces提供のホストを使います。自前の非公開リバースプロキシを使う場合は正確な `--allowed-host` を指定します。認証はCodespacesのPrivateポートまたは運用側の認証プロキシが前提であり、このPythonサーバーを直接公開しないでください。
+
+照合後は **次へ：3日間計画を確認** から [リネンの予定・発注案](DAILY-PLAN.md) へ進めます。同じCSV・リネンExcelを再利用し、PLや今回の会計例外と計画処理を分けます。

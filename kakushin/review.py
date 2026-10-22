@@ -146,9 +146,8 @@ def compare_pl(book,expected,month,approvals):
                 note='未承認・保留がある場合のCSV値は部分集計であり確定値ではありません')
 
 
-def compare_linen(book,parsed,start):
+def read_linen(book,start):
     sheets={name:book.sheet(name,303,38) for name in ('現在の在庫','部屋使用','部屋入庫','倉庫入出庫履歴','八代業者入庫履歴')}
-    stock,use,inc,warehouse,ys=[sheets[n] for n in sheets]
     dates={name:date_columns(book,cells,3 if name=='倉庫入出庫履歴' else 1) for name,cells in sheets.items()}
     required=[(start+timedelta(days=i)).isoformat() for i in range(3) if (start+timedelta(days=i)).month==start.month]
     for name in dates:
@@ -168,6 +167,13 @@ def compare_linen(book,parsed,start):
             for item,row in m['rows'].items():
                 if normalize(value(sheets[name],f'A{row}') or '') not in {normalize(x) for x in ALIASES[item]}:
                     raise ValueError(f'{name}の品目行が異なります: A{row}')
+    return sheets,dates
+
+
+def compare_linen(book,parsed,start):
+    sheets,dates=read_linen(book,start)
+    stock,use,inc,warehouse,ys=[sheets[n] for n in sheets]
+    required=[(start+timedelta(days=i)).isoformat() for i in range(3) if (start+timedelta(days=i)).month==start.month]
     issues=[];usage_diff=[];checked=0;skipped=0;events_count=0
     end=date(2026,10,31)
     # Only the documented October 2026 linen horizon is enabled.

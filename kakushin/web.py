@@ -84,6 +84,15 @@ def serve(store, port=8000, host="127.0.0.1", demo=False, review=False, allowed_
                 payload = json.loads(self.rfile.read(length))
                 if not isinstance(payload, dict):
                     raise ValueError('JSON object required')
+                if self.path == '/api/daily-plan':
+                    if demo or not review:
+                        return self.send(403, {'error': '読み取り専用のファイル照合モードで起動してください'})
+                    from .daily_plan import schedule_files
+                    data = base64.b64decode(payload['csv_base64'], validate=True)
+                    linen = base64.b64decode(payload['linen_base64'], validate=True)
+                    if len(data)>8*1024*1024 or len(linen)>12*1024*1024:
+                        return self.send(413, {'error': 'CSVは8MB、リネンExcelは12MB以下にしてください'})
+                    return self.send(200, schedule_files(data, linen, payload['business_date'], payload.get('options')))
                 if self.path == '/api/reconcile':
                     if demo:
                         return self.send(403, {'error': '架空データ専用モードでは実ファイルを受け付けません'})

@@ -20,7 +20,7 @@ def towel_reduction(plans, safe_reduction):
         total = sum(p['quantities'].get(item, 0) for p in result)
         wanted = int((Decimal(total) / 10).quantize(Decimal('1'), rounding=ROUND_HALF_UP))
         left = wanted
-        ranked = sorted(result, key=lambda p: (-safe_reduction.get(p['id'], {}).get(item, 0), p['date'], p['room']))
+        ranked = sorted(result, key=lambda p: (-(safe_reduction.get(p['id'], {}).get(item, 0) or 0), p['date'], p['room']))
         exclusions = []
         for p in ranked:
             slack = safe_reduction.get(p['id'], {}).get(item)
