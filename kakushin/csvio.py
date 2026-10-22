@@ -44,8 +44,8 @@ def integer(value, name):
     return int(value.replace(',', ''))
 
 
-def parse_csv(data):
-    exceptions = load_exceptions()
+def parse_csv(data, exceptions=None):
+    exceptions = load_exceptions() if exceptions is None else exceptions
     result = dict(sha256=hashlib.sha256(data).hexdigest(), schema=None, reservations=[], issues=[])
     try:
         text = data.decode('utf-8-sig', errors='strict')

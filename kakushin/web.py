@@ -1,10 +1,11 @@
-"""Loopback-only local operator UI. Do not expose directly to the Internet."""
+"""Local operator UI and isolated, fictional-data-only cloud demo."""
 import base64
 import binascii
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 from pathlib import Path
 import secrets
+import re
 from urllib.parse import urlsplit
 
 from .service import run_csv, stock_tool, today
@@ -13,7 +14,9 @@ from .master import MASTER, RULE_VERSION
 MAX_BODY = 12 * 1024 * 1024
 
 
-def serve(store, port=8000):
+def serve(store, port=8000, host="127.0.0.1", demo=False):
+    if host != "127.0.0.1" and not demo:
+        raise ValueError("外部バインドはデモ専用です")
     csrf = secrets.token_urlsafe(32)
 
     class Handler(BaseHTTPRequestHandler):
@@ -22,7 +25,12 @@ def serve(store, port=8000):
             pass
 
         def trusted_host(self):
-            return self.headers.get('Host') in (f'127.0.0.1:{port}', f'localhost:{port}')
+            authority = self.headers.get('Host', '')
+            if demo:
+                # A reverse proxy may preserve its own hostname/port. No real data
+                # or user uploads are available in this separate demo process.
+                return bool(re.fullmatch(r'[A-Za-z0-9](?:[A-Za-z0-9.-]*[A-Za-z0-9])?(?::[0-9]{1,5})?', authority))
+            return authority in (f'127.0.0.1:{port}', f'localhost:{port}')
 
         def send(self, status, data, html=False):
             encoded = data.encode() if html else json.dumps(data, ensure_ascii=False).encode()
@@ -31,9 +39,11 @@ def serve(store, port=8000):
             self.send_header('Content-Length', str(len(encoded)))
             self.send_header('Cache-Control', 'no-store')
             self.send_header('X-Content-Type-Options', 'nosniff')
-            self.send_header('X-Frame-Options', 'DENY')
+            if not demo:
+                self.send_header('X-Frame-Options', 'DENY')
             self.send_header('Referrer-Policy', 'no-referrer')
-            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'nonce-" + csrf + "'; style-src 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'")
+            ancestors = "https: http://localhost:* http://127.0.0.1:*" if demo else "'none'"
+            self.send_header('Content-Security-Policy', "default-src 'self'; script-src 'nonce-" + csrf + "'; style-src 'unsafe-inline'; connect-src 'self'; frame-ancestors " + ancestors + "; base-uri 'none'; form-action 'self'")
             self.end_headers()
             self.wfile.write(encoded)
 
@@ -42,10 +52,10 @@ def serve(store, port=8000):
                 return self.send(403, {'error': 'Host not allowed'})
             path = urlsplit(self.path).path
             if path == '/':
-                html = Path(__file__).with_name('ui.html').read_text().replace('__CSRF__', csrf)
+                html = Path(__file__).with_name('ui.html').read_text().replace('__CSRF__', csrf).replace('__DEMO__', 'true' if demo else 'false')
                 return self.send(200, html, True)
             if path == '/api/health':
-                return self.send(200, dict(status='ok', mode='SHADOW', today=today(), rule_version=RULE_VERSION))
+                return self.send(200, dict(status='ok', mode='SHADOW', demo=demo, today=today(), rule_version=RULE_VERSION))
             if path == '/api/master':
                 return self.send(200, MASTER)
             if path == '/api/runs':
@@ -65,7 +75,15 @@ def serve(store, port=8000):
                 payload = json.loads(self.rfile.read(length))
                 if not isinstance(payload, dict):
                     raise ValueError('JSON object required')
+                if self.path == '/api/demo':
+                    if not demo:
+                        return self.send(404, {'error': 'デモ専用の操作です'})
+                    data = Path(__file__).with_name('demo.csv').read_bytes()
+                    result, reused = run_csv(store, data, '2026-10', 'full', '2026-10-22', private_exceptions=False)
+                    return self.send(200, dict(result=result, reused=reused))
                 if self.path == '/api/run':
+                    if demo:
+                        return self.send(403, {'error': 'デモでは実CSVを受け付けません。「架空データで試す」を使ってください'})
                     data = base64.b64decode(payload['csv_base64'], validate=True)
                     if len(data) > 8 * 1024 * 1024:
                         return self.send(413, {'error': 'CSVは8MB以下'})
@@ -79,9 +97,9 @@ def serve(store, port=8000):
             except Exception:
                 return self.send(500, {'error': '処理失敗。入力・ローカルDBの状態を確認してください'})
 
-    server = ThreadingHTTPServer(('127.0.0.1', port), Handler)
+    server = ThreadingHTTPServer((host, port), Handler)
     server.timeout = 30
-    print(f'KAKUSHIN operator server started; loopback port={port}; mode=SHADOW', flush=True)
+    print(f'KAKUSHIN operator server started; host={host}; port={port}; mode=SHADOW; demo={demo}', flush=True)
     try:
         server.serve_forever()
     finally:

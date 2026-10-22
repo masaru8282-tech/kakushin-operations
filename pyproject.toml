@@ -13,4 +13,4 @@ dependencies = []
 packages = ["kakushin"]
 
 [tool.setuptools.package-data]
-kakushin = ["master.json", "ui.html"]
+kakushin = ["master.json", "ui.html", "demo.csv"]

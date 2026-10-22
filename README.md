@@ -2,6 +2,10 @@
 
 仕様書（抽出仕様 v1.0、2026/10/22）に基づく、独立した固定計算エンジンとローカル操作画面です。Python 3.11以上、追加依存なしで動作します。**現在はシャドーモードです。本番Sheets更新・Slack通知・業者送信・月替わりは実行しません。**
 
+## クラウドで画面を開く（Windowsへのインストール不要）
+
+GitHubの **Code → Codespaces → Create codespace on main** から起動できます。画面が自動で開かない場合は **PORTS → 8000 → Open in Browser** を押してください。架空データ専用・一時DBのデモであり、本番には接続しません。詳しくは [画面を開く手順](docs/TEST-ENVIRONMENT.md) を参照してください。
+
 ## 起動
 
 ```bash
@@ -10,7 +14,7 @@ python3 -m unittest discover -s tests -v
 python3 -m kakushin serve --port 8000
 ```
 
-サーバーはローカルの8000番ポートで起動します。インターネットへ直接公開しないでください。ローカルの操作者を信頼する単一マシン構成で、複数利用者の認証・ロール管理はまだありません。クラウドのオンボーディング画面ではWebプレビューを利用できないため、CLIでも検証できます。
+上の通常サーバーはローカルの8000番ポートで起動します。インターネットへ直接公開しないでください。ローカルの操作者を信頼する単一マシン構成で、複数利用者の認証・ロール管理はまだありません。このCodexセッションではブラウザー用転送URLの発行機能がありません。クラウドでの表示には上記Codespacesを使い、Codex内部ではCLI・HTTP・実ブラウザーで検証します。
 
 ```bash
 python3 -m kakushin run examples/reservations.csv \
@@ -63,3 +67,5 @@ python3 -m kakushin backup /tmp/kakushin-backup.sqlite3
 実予約に紐づく取消料特例は `.runtime/private-exceptions.json` に分離しています（Git対象外）。新しいPCへcloneした場合は特例がなく、対象行は保留になります。必要な場合のみ承認済みの設定を安全な経路で配置してください。別の保存先は `KAKUSHIN_EXCEPTIONS_FILE` で指定できます。設定には予約IDごとに `room / ota / sales / fee / ci / co / column / month`、任意で `guests` を持たせます。実予約の設定をIssue・チャット・Gitへ貼らないでください。
 
 初めて画面を表示する方は [PCでのテスト手順](docs/TEST-ENVIRONMENT.md) を参照してください。
+
+クラウド向けデモを手動起動する場合は `python3 -m kakushin serve --demo --host 0.0.0.0 --port 8000` を使用します。プロキシのHostと埋め込みを許可するのは、この架空データ専用モードだけです。通常モードの外部バインドは拒否します。

@@ -8,9 +8,9 @@ from .engine import process
 from .linen import parse_stock_sequence, supplier_order, reconcile, target_delivery, simulate_stock, yatsushiro_supply
 
 
-def run_csv(store, data, month, completeness, business_date):
+def run_csv(store, data, month, completeness, business_date, private_exceptions=True):
     return store.execute(data, month, completeness, business_date,
-                         lambda: process(parse_csv(data), month, completeness, business_date))
+                         lambda: process(parse_csv(data, exceptions=None if private_exceptions else {}), month, completeness, business_date))
 
 
 def stock_tool(payload):

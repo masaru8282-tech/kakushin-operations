@@ -1,5 +1,6 @@
 import argparse
 import json
+import tempfile
 from pathlib import Path
 
 from .service import run_csv, stock_tool, today
@@ -12,6 +13,8 @@ def main():
     sub = parser.add_subparsers(dest='command', required=True)
     web = sub.add_parser('serve')
     web.add_argument('--port', type=int, default=8000)
+    web.add_argument('--host', choices=('127.0.0.1', '0.0.0.0'), default='127.0.0.1')
+    web.add_argument('--demo', action='store_true', help='架空データ専用・一時DB・実CSV受付なし')
     run = sub.add_parser('run')
     run.add_argument('csv', type=Path)
     run.add_argument('--month', required=True)
@@ -25,6 +28,13 @@ def main():
     if args.command == 'tool':
         print(json.dumps(stock_tool(json.loads(args.input.read_text())), ensure_ascii=False, indent=2))
         return
+    if args.command == 'serve' and args.demo:
+        from .web import serve
+        with tempfile.TemporaryDirectory(prefix='kakushin-demo-') as temporary:
+            serve(Store(temporary), args.port, host=args.host, demo=True)
+        return
+    if args.command == 'serve' and args.host != '127.0.0.1':
+        parser.error('外部からの接続は --demo の架空データ専用モードのみ許可します')
     store = Store(args.state_dir)
     if args.command == 'serve':
         from .web import serve

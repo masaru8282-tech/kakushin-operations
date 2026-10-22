@@ -1,0 +1,13 @@
+{
+  "name": "KAKUSHIN cloud demo",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "KAKUSHIN 架空データ専用デモ",
+      "onAutoForward": "openBrowser",
+      "protocol": "http"
+    }
+  },
+  "postStartCommand": "python3 .devcontainer/start_demo.py"
+}

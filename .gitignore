@@ -22,5 +22,6 @@ service-account*.json
 # Reservation imports and spreadsheet exports; only the fictional fixture is public
 *.csv
 !/examples/reservations.csv
+!/kakushin/demo.csv
 *.xlsx
 *.xls
